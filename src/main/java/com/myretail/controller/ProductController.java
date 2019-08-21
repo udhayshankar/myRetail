@@ -3,6 +3,7 @@ package com.myretail.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myretail.model.ProductDetails;
-import com.myretail.model.ProductRepository;
+import com.myretail.repository.ProductRepository;
 
 
 @RestController
@@ -30,12 +31,14 @@ public class ProductController {
 	}
 	
 	@RequestMapping(value = "/bulk",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	
 	public void bulkInsertProduct(@RequestBody List<ProductDetails> productList) {
 		productRepository.saveAll(productList);
 	}
 
 	//Get Product By ID
 	@RequestMapping(value ="/{id}", method = RequestMethod.GET)
+	@Cacheable(value= "idCache", key= "#id")
 	public ProductDetails getProductByID(@PathVariable String id) {
  		return productRepository.findProductById(Integer.parseInt(id));	
 		
@@ -55,6 +58,7 @@ public class ProductController {
 	
 	//Retrieve All Products
 	@RequestMapping(value="/")
+	@Cacheable(value= "allIdCache", unless= "#result.size() == 0")
 	public List<ProductDetails> retrieveProductDetails(){
 		return productRepository.findAll();
 		
