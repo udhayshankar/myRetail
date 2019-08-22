@@ -11,14 +11,12 @@ public class MyRetailSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests()
-				.anyRequest().authenticated()
-				.and().httpBasic();
+		http.csrf().disable().authorizeRequests().anyRequest().authenticated().and().httpBasic();
 	}
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.inMemoryAuthentication().withUser("udhay").password("{noop}udhay1995").roles("USER");
-		
+
 	}
 }
