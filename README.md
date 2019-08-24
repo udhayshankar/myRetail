@@ -1,4 +1,4 @@
-MYRETAILAPP
+# My Retail Application
 
 myRetail is a rapidly growing company with HQ in Richmond, VA and over 200 stores across the east coast. myRetail wants to make its internal data available to any number of client devices, from myRetail.com to native mobile apps.
 * Create a rest API to do a CURD operations and store the data id, current_price, currency_code.
