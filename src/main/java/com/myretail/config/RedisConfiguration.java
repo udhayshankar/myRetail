@@ -1,9 +1,11 @@
 package com.myretail.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -13,11 +15,14 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 @PropertySource("classpath:application.properties")
 public class RedisConfiguration {
 
+	@Autowired
+	Environment env;
+	
 	@Bean
 	public LettuceConnectionFactory redisConnectionFactory() {
 		RedisStandaloneConfiguration redisConf = new RedisStandaloneConfiguration();
-		redisConf.setHostName("127.0.0.1");
-		redisConf.setPort(6379);
+		redisConf.setHostName(env.getProperty("spring.redis.host"));
+		redisConf.setPort(Integer.parseInt(env.getRequiredProperty("spring.redis.port")));
 		return new LettuceConnectionFactory(redisConf);
 	}
 

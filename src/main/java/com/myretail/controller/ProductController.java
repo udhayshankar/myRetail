@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.MediaType;
@@ -24,14 +25,14 @@ public class ProductController {
 	@Autowired
 	ProductRepository productRepository;
 
-	@RequestMapping(value = "/bulk", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/admin/bulk", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 
 	public void bulkInsertProduct(@RequestBody List<ProductDetails> productList) {
 		productRepository.saveAll(productList);
 	}
 
 	// Insert single data
-	@RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/admin", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void createProduct(@RequestBody ProductDetails productDetails) {
 		productRepository.save(productDetails);
 	}
@@ -45,16 +46,17 @@ public class ProductController {
 	}
 
 	// Delete Product By ID Cachedelete
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/admin/{id}", method = RequestMethod.DELETE)
 	@CacheEvict(value = "productdetailsCache", key = "#id")
 	public void deleteProduct(@PathVariable String id) {
 		productRepository.deleteById(Integer.parseInt(id));
 	}
 
 	// Update Product By ID
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void updateProductByID(@PathVariable String id, @RequestBody ProductDetails product) {
-		productRepository.save(product);
+	@RequestMapping(value = "/admin/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@CachePut(value = "productdetailsCache", key = "#id")
+	public ProductDetails updateProductByID(@PathVariable String id, @RequestBody ProductDetails product) {
+		return productRepository.save(product);
 	}
 
 	// Retrieve All Products
