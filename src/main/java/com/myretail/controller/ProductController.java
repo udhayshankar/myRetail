@@ -63,7 +63,6 @@ public class ProductController {
 	@RequestMapping(value = "/")
 	public List<ProductDetails> retrieveProductDetails() {
 		return productRepository.findAll();
-
 	}
 
 }
