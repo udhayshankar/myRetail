@@ -23,12 +23,18 @@ port : 6379
 ```
 #### Basic Authorization credentials
 ```
+user credentials
 username : udhay
 password : udhay1995
 ```
+```
+admin credentials
+username : admin
+password: admin
+```
 ## Sample JSON POST request
 ```
-http://localhost:8080/products
+http://localhost:8080/products/admin
 {
     "id": 89654,
     "product_description": "watch",
