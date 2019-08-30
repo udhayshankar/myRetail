@@ -4,7 +4,7 @@ myRetail is a rapidly growing company with HQ in Richmond, VA and over 200 store
 * Create a rest API to do a CURD operations and store the data id, current_price, currency_code.
 * Assume there is a mongo DB which has product description and reads product information from a NoSQL data store and combines it with the product id and name from the HTTP request into a single response.
 * The service should be secured.
-[MyRetailApp](MyRetailApp.png)
+![MyRetailApp](MyRetailApp.png)
 ## Prerequisites
 * MongoDB 4.0
 * Redis cache server
