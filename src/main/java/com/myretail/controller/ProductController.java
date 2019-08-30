@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.myretail.model.ProductDetails;
 import com.myretail.repository.ProductRepository;
+import com.myretail.service.Sender;
 
 @RestController
 @RequestMapping("/products")
@@ -25,10 +26,13 @@ public class ProductController {
 	@Autowired
 	ProductRepository productRepository;
 
-	@RequestMapping(value = "/admin/bulk", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Autowired
+	Sender sender;
 
+	// KafKa Queue Implemented
+	@RequestMapping(value = "/admin/bulk", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void bulkInsertProduct(@RequestBody List<ProductDetails> productList) {
-		productRepository.saveAll(productList);
+		productList.forEach(product -> this.sender.send(product));
 	}
 
 	// Insert single data
@@ -56,6 +60,16 @@ public class ProductController {
 	@RequestMapping(value = "/admin/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@CachePut(value = "productdetailsCache", key = "#id")
 	public ProductDetails updateProductByID(@PathVariable String id, @RequestBody ProductDetails product) {
+		ProductDetails prodDetails = productRepository.findProductById(Integer.parseInt(id));
+		if (product.getId() == null)
+			product.setId(prodDetails.getId());
+		if (product.getProduct_description() == null)
+			product.setProduct_description(prodDetails.getProduct_description());
+		if (product.getCurrent_price() == null)
+			product.setCurrent_price(prodDetails.getCurrent_price());
+		if (product.getCurrency_code() == null)
+			product.setCurrency_code(prodDetails.getCurrency_code());
+
 		return productRepository.save(product);
 	}
 

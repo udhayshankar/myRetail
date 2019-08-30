@@ -52,4 +52,11 @@ public class ProductDetails implements Serializable {
 		this.currency_code = currency_code;
 	}
 
+	@Override
+	public String toString() {
+
+		return (getId() + " " + getProduct_description() + " " + getCurrent_price() + " " + getCurrency_code())
+				.toString();
+	}
+
 }

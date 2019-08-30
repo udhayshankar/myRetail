@@ -17,7 +17,7 @@ public class RedisConfiguration {
 
 	@Autowired
 	Environment env;
-	
+
 	@Bean
 	public LettuceConnectionFactory redisConnectionFactory() {
 		RedisStandaloneConfiguration redisConf = new RedisStandaloneConfiguration();

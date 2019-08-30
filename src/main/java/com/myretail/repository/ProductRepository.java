@@ -5,9 +5,8 @@ import org.springframework.data.repository.query.Param;
 
 import com.myretail.model.ProductDetails;
 
+public interface ProductRepository extends MongoRepository<ProductDetails, Integer> {
 
-public interface ProductRepository extends MongoRepository <ProductDetails, Integer>{
-	
-	ProductDetails findProductById(@Param("id")Integer id);
-	
+	ProductDetails findProductById(@Param("id") Integer id);
+
 }
